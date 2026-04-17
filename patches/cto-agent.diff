@@ -4,42 +4,42 @@ Index: code-server/lib/vscode/src/vs/workbench/contrib/chat/browser/agentSession
 +++ code-server/lib/vscode/src/vs/workbench/contrib/chat/browser/agentSessions/agentSessions.ts
 @@ -56,7 +56,7 @@ export function getAgentSessionProviderN
  export function getAgentSessionProviderName(provider: AgentSessionTarget): string {
- 	switch (provider) {
- 		case AgentSessionProviders.Local:
--			return localize('chat.session.providerLabel.local', "Local");
-+			return localize('chat.session.providerLabel.local', "CTO");
- 		case AgentSessionProviders.Background:
- 			return localize('chat.session.providerLabel.background', "Copilot CLI");
- 		case AgentSessionProviders.Cloud:
+ switch (provider) {
+ AgentSessionProviders.Local:
+-return localize('chat.session.providerLabel.local', "Local");
++return localize('chat.session.providerLabel.local', "5dlabs CTO");
+ AgentSessionProviders.Background:
+  localize('chat.session.providerLabel.background', "Copilot CLI");
+ AgentSessionProviders.Cloud:
 @@ -72,7 +72,7 @@ export function getAgentSessionProviderI
  export function getAgentSessionProviderIcon(provider: AgentSessionTarget): ThemeIcon {
- 	switch (provider) {
- 		case AgentSessionProviders.Local:
--			return Codicon.vm;
-+			return Codicon.rocket;
- 		case AgentSessionProviders.Background:
- 			return Codicon.copilot;
- 		case AgentSessionProviders.Cloud:
+ switch (provider) {
+ AgentSessionProviders.Local:
+-return Codicon.vm;
++return Codicon.rocket;
+ AgentSessionProviders.Background:
+  Codicon.copilot;
+ AgentSessionProviders.Cloud:
 @@ -126,7 +126,7 @@ export function getAgentSessionProviderD
  export function getAgentSessionProviderDescription(provider: AgentSessionTarget): string {
- 	switch (provider) {
- 		case AgentSessionProviders.Local:
--			return localize('chat.session.providerDescription.local', "Run tasks within VS Code chat. The agent iterates via chat and works interactively to implement changes on your main workspace.");
-+			return localize('chat.session.providerDescription.local', "Your CTO coding agent. Routes to the active agent harness (OpenClaw, Hermes, etc.) running on this workspace.");
- 		case AgentSessionProviders.Background:
- 			return localize('chat.session.providerDescription.background', "Delegate tasks to a background agent running locally on your machine. The agent iterates via chat and works asynchronously in a Git worktree to implement changes isolated from your main workspace using the GitHub Copilot CLI.");
- 		case AgentSessionProviders.Cloud:
+ switch (provider) {
+ AgentSessionProviders.Local:
+-return localize('chat.session.providerDescription.local', "Run tasks within VS Code chat. The agent iterates via chat and works interactively to implement changes on your main workspace.");
++return localize('chat.session.providerDescription.local', "5dlabs CTO Agents. Available agents are discovered dynamically from the gateway. Routes to the active harness (OpenClaw, Hermes, etc.) running on this workspace.");
+ AgentSessionProviders.Background:
+  localize('chat.session.providerDescription.background', "Delegate tasks to a background agent running locally on your machine. The agent iterates via chat and works asynchronously in a Git worktree to implement changes isolated from your main workspace using the GitHub Copilot CLI.");
+ AgentSessionProviders.Cloud:
 Index: code-server/lib/vscode/src/vs/workbench/contrib/chat/browser/widget/input/sessionTargetPickerActionItem.ts
 ===================================================================
 --- code-server.orig/lib/vscode/src/vs/workbench/contrib/chat/browser/widget/input/sessionTargetPickerActionItem.ts
 +++ code-server/lib/vscode/src/vs/workbench/contrib/chat/browser/widget/input/sessionTargetPickerActionItem.ts
 @@ -145,7 +145,8 @@ export class SessionTypePickerActionItem
- 	}
+ }
  
- 	protected _isVisible(_type: AgentSessionTarget): boolean {
--		return true;
-+		// CTO fork: only show the Local session (rebranded as CTO)
-+		return _type === 'local';
- 	}
+ protected _isVisible(_type: AgentSessionTarget): boolean {
+-return true;
++// CTO fork: only show the Local session (rebranded as 5dlabs CTO)
++return _type === 'local';
+ }
  
- 	protected _isSessionTypeEnabled(type: AgentSessionTarget): boolean {
+ protected _isSessionTypeEnabled(type: AgentSessionTarget): boolean {
