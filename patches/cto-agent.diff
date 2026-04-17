@@ -2,65 +2,33 @@ Index: code-server/lib/vscode/src/vs/workbench/contrib/chat/browser/agentSession
 ===================================================================
 --- code-server.orig/lib/vscode/src/vs/workbench/contrib/chat/browser/agentSessions/agentSessions.ts
 +++ code-server/lib/vscode/src/vs/workbench/contrib/chat/browser/agentSessions/agentSessions.ts
-@@ -19,6 +19,7 @@ export enum AgentSessionProviders {
- 	Codex = 'openai-codex',
- 	Growth = 'copilot-growth',
- 	AgentHostCopilot = 'agent-host-copilot',
-+	CTO = 'cto',
- }
- 
- export type AgentSessionTarget = AgentSessionProviders | (string & {});
-@@ -38,6 +39,7 @@ export function getAgentSessionProvider(
- 		case AgentSessionProviders.Claude:
- 		case AgentSessionProviders.Codex:
- 		case AgentSessionProviders.AgentHostCopilot:
-+		case AgentSessionProviders.CTO:
- 			return type;
- 		default:
- 			return undefined;
-@@ -60,6 +62,8 @@ export function getAgentSessionProviderN
- 			return 'Growth';
- 		case AgentSessionProviders.AgentHostCopilot:
- 			return 'Agent Host - Copilot';
-+		case AgentSessionProviders.CTO:
-+			return 'CTO';
- 		default:
- 			return provider;
- 	}
-@@ -78,6 +82,8 @@ export function getAgentSessionProviderI
- 			return Codicon.lightbulb;
- 		case AgentSessionProviders.AgentHostCopilot:
- 			return Codicon.vscodeInsiders;
-+		case AgentSessionProviders.CTO:
+@@ -56,7 +56,7 @@ export function getAgentSessionProviderN
+ export function getAgentSessionProviderName(provider: AgentSessionTarget): string {
+ 	switch (provider) {
+ 		case AgentSessionProviders.Local:
+-			return localize('chat.session.providerLabel.local', "Local");
++			return localize('chat.session.providerLabel.local', "CTO");
+ 		case AgentSessionProviders.Background:
+ 			return localize('chat.session.providerLabel.background', "Copilot CLI");
+ 		case AgentSessionProviders.Cloud:
+@@ -72,7 +72,7 @@ export function getAgentSessionProviderI
+ export function getAgentSessionProviderIcon(provider: AgentSessionTarget): ThemeIcon {
+ 	switch (provider) {
+ 		case AgentSessionProviders.Local:
+-			return Codicon.vm;
 +			return Codicon.rocket;
- 		default:
- 			return Codicon.extensions;
- 	}
-@@ -90,6 +96,7 @@ export function isFirstPartyAgentSession
- 		case AgentSessionProviders.Local:
  		case AgentSessionProviders.Background:
+ 			return Codicon.copilot;
  		case AgentSessionProviders.Cloud:
-+		case AgentSessionProviders.CTO:
- 		case AgentSessionProviders.AgentHostCopilot:
- 			return true;
- 		case AgentSessionProviders.Claude:
-@@ -112,6 +119,7 @@ export function getAgentCanContinueIn(pr
+@@ -126,7 +126,7 @@ export function getAgentSessionProviderD
+ export function getAgentSessionProviderDescription(provider: AgentSessionTarget): string {
+ 	switch (provider) {
  		case AgentSessionProviders.Local:
+-			return localize('chat.session.providerDescription.local', "Run tasks within VS Code chat. The agent iterates via chat and works interactively to implement changes on your main workspace.");
++			return localize('chat.session.providerDescription.local', "Your CTO coding agent. Routes to the active agent harness (OpenClaw, Hermes, etc.) running on this workspace.");
  		case AgentSessionProviders.Background:
+ 			return localize('chat.session.providerDescription.background', "Delegate tasks to a background agent running locally on your machine. The agent iterates via chat and works asynchronously in a Git worktree to implement changes isolated from your main workspace using the GitHub Copilot CLI.");
  		case AgentSessionProviders.Cloud:
-+		case AgentSessionProviders.CTO:
- 			return true;
- 		case AgentSessionProviders.Claude:
- 		case AgentSessionProviders.Codex:
-@@ -134,6 +142,8 @@ export function getAgentSessionProviderD
- 			return localize('chat.session.providerDescription.claude', "Delegate tasks to the Claude Agent SDK using the Claude models included in your GitHub Copilot subscription. The agent iterates via chat and works interactively to implement changes on your main workspace.");
- 		case AgentSessionProviders.Codex:
- 			return localize('chat.session.providerDescription.codex', "Delegate tasks to the Codex agent using the codex models included in your GitHub Copilot subscription. The agent iterates via chat and works asynchronously in a sandbox to implement changes and pull requests as needed.");
-+		case AgentSessionProviders.CTO:
-+			return localize('chat.session.providerDescription.cto', "Your CTO coding agent. Routes to the active agent harness (OpenClaw, Hermes, etc.) running on this workspace.");
- 		default:
- 			return '';
- 	}
 Index: code-server/lib/vscode/src/vs/workbench/contrib/chat/browser/widget/input/sessionTargetPickerActionItem.ts
 ===================================================================
 --- code-server.orig/lib/vscode/src/vs/workbench/contrib/chat/browser/widget/input/sessionTargetPickerActionItem.ts
@@ -70,8 +38,8 @@ Index: code-server/lib/vscode/src/vs/workbench/contrib/chat/browser/widget/input
  
  	protected _isVisible(_type: AgentSessionTarget): boolean {
 -		return true;
-+		// CTO fork: only show the CTO session type
-+		return _type === 'cto';
++		// CTO fork: only show the Local session (rebranded as CTO)
++		return _type === 'local';
  	}
  
  	protected _isSessionTypeEnabled(type: AgentSessionTarget): boolean {
